@@ -27,7 +27,7 @@ Creado por **Jaki** para la comunidad. 🛡️
 Para instalar JakiSnippets en todo tu sistema Linux/Kali, solo ejecuta:
 
 ```bash
-git clone [https://github.com/TU_USUARIO/JakiSnippets.git](https://github.com/TU_USUARIO/JakiSnippets.git)
+git clone https://github.com/JakiNet/JakiSnippets.git
 cd JakiSnippets
 chmod +x install.sh
 ./install.sh
