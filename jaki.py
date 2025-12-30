@@ -3,7 +3,7 @@ import json
 import sys
 import os
 
-VERSION_ACTUAL = "2.1"
+VERSION_ACTUAL = "1.2"
 
 # Intentar importar pyperclip para copiar al portapapeles
 try:
@@ -173,20 +173,20 @@ def actualizar():
         print(f"{Colores.YELLOW}[*] Descargando actualización...{Colores.ENDC}")
         result = os.system(f"git clone --depth 1 {repo_url} {temp_dir} > /dev/null 2>&1")
         
-            if result == 0 and os.path.exists(temp_dir):
+        # Esta línea debe estar alineada con el 'result' de arriba
+        if result == 0 and os.path.exists(temp_dir):
             os.chdir(temp_dir)
             archivos = os.listdir('.')
             instalador = next((f for f in archivos if f.lower() == "install.sh"), None)
             
             if instalador:
                 os.system(f"chmod +x {instalador}")
-                if os.system(f"sudo bash {instalador}") == 0: # Añadido sudo por si acaso
-                    # Usamos una versión genérica si version_remota no existe
+                if os.system(f"sudo bash {instalador}") == 0:
                     v = version_remota if 'version_remota' in locals() else "nueva"
                     print(f"\n{Colores.GREEN}✅ ¡JakiSnippets actualizado a la v{v}!{Colores.ENDC}")
-
             else:
                 print(f"{Colores.RED}[!] Error: No se encontró el instalador.{Colores.ENDC}")
+                
     finally:
         os.chdir("/")
         os.system(f"rm -rf {temp_dir}")
