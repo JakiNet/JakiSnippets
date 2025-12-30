@@ -127,37 +127,33 @@ def actualizar():
     """Descarga la última versión desde GitHub y reinstala la herramienta."""
     print(f"{Colores.BLUE}[*] Iniciando actualización desde GitHub...{Colores.ENDC}")
     
-    # Comprobar si se está ejecutando con privilegios de root
     if os.geteuid() != 0:
-        print(f"{Colores.RED}[!] Error: Debes ejecutar 'sudo jaki update' para actualizar los archivos del sistema.{Colores.ENDC}")
+        print(f"{Colores.RED}[!] Error: Debes ejecutar 'sudo jaki update' para actualizar.{Colores.ENDC}")
         return
 
     repo_url = "https://github.com/JakiNet/JakiSnippets.git"
     temp_dir = "/tmp/jaki_update"
 
     try:
-        # Limpiar cualquier rastro anterior y clonar el repo
         os.system(f"rm -rf {temp_dir}")
         print(f"{Colores.YELLOW}[*] Clonando última versión...{Colores.ENDC}")
-        resultado = os.system(f"git clone --depth 1 {repo_url} {temp_dir} > /dev/null 2>&1")
+        # Clonamos el repositorio
+        os.system(f"git clone --depth 1 {repo_url} {temp_dir} > /dev/null 2>&1")
         
-        if resultado != 0:
-            print(f"{Colores.RED}[!] Error al clonar el repositorio. Verifica tu conexión.{Colores.ENDC}")
-            return
-
-        # Cambiar al directorio temporal y ejecutar el instalador
-        os.chdir(temp_dir)
-        if os.path.exists("Install.sh"):
-            print(f"{Colores.YELLOW}[*] Ejecutando instalador...{Colores.ENDC}")
-            os.system("bash Install.sh")
-            print(f"\n{Colores.GREEN}✅ ¡JakiSnippets se ha actualizado correctamente!{Colores.ENDC}")
-        else:
-            print(f"{Colores.RED}[!] No se encontró Install.sh en el repositorio.{Colores.ENDC}")
-
+        if os.path.exists(temp_dir):
+            os.chdir(temp_dir)
+            
+            # Cambiamos a 'install.sh' en minúsculas
+            if os.path.exists("install.sh"):
+                print(f"{Colores.YELLOW}[*] Ejecutando instalador...{Colores.ENDC}")
+                os.system("bash install.sh")
+                print(f"\n{Colores.GREEN}✅ ¡JakiSnippets actualizado con éxito!{Colores.ENDC}")
+            else:
+                print(f"{Colores.RED}[!] Error: No se encontró 'install.sh' en el repo.{Colores.ENDC}")
+        
     except Exception as e:
-        print(f"{Colores.RED}[!] Ocurrió un error inesperado: {e}{Colores.ENDC}")
+        print(f"{Colores.RED}[!] Error: {e}{Colores.ENDC}")
     finally:
-        # Limpiar
         os.system(f"rm -rf {temp_dir}")
 
 def main():
