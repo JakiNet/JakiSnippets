@@ -54,6 +54,36 @@
       "cmd": "python3 -c \"import sys, urllib.parse; print(urllib.parse.unquote(sys.stdin.read()))\""
     }
   ],
+  "wireshark_tshark": [
+    {
+      "titulo": "TShark: Capturar tráfico en una interfaz",
+      "cmd": "tshark -i eth0"
+    },
+    {
+      "titulo": "TShark: Leer un archivo .pcap",
+      "cmd": "tshark -r archivo.pcap"
+    },
+    {
+      "titulo": "Filtro: Mostrar solo tráfico HTTP (Puerto 80)",
+      "cmd": "tshark -r archivo.pcap -Y 'http'"
+    },
+    {
+      "titulo": "Filtro: Buscar strings específicos (ej. password)",
+      "cmd": "tshark -r archivo.pcap -Y 'frame contains \"password\"'"
+    },
+    {
+      "titulo": "Filtro Wireshark: Ver una IP específica",
+      "cmd": "ip.addr == 192.168.1.1"
+    },
+    {
+      "titulo": "Filtro Wireshark: Tráfico GET de HTTP",
+      "cmd": "http.request.method == \"GET\""
+    },
+    {
+      "titulo": "Extraer archivos de una captura (TShark)",
+      "cmd": "tshark -r captura.pcap --export-objects http,dest_dir"
+    }
+  ],
   "windows_ad": [
     {"titulo": "Evil-WinRM: Conexión básica", "cmd": "evil-winrm -i IP -u usuario -p password"},
     {"titulo": "Impacket: GetADUsers", "cmd": "impacket-GetADUsers -all -dc-ip IP DOMINIO/usuario"},
