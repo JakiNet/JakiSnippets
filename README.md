@@ -6,7 +6,7 @@
 > **Tu arsenal de comandos instantáneo en la terminal.**
 
 <p align="center">
-  <img src="terminal.png" alt="JakiSnippets en acción" width="800">
+  <img src="terminal2.png" alt="JakiSnippets en acción" width="800">
 </p>
 
 **JakiSnippets** es una herramienta CLI (Command Line Interface) diseñada para hackers, pentesters y estudiantes de ciberseguridad que están cansados de buscar los mismos comandos una y otra vez.
