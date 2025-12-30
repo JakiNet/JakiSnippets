@@ -33,4 +33,5 @@ chmod +x install.sh
 ./install.sh
 
 ---
-Ejemplo: Ahora, desde cualquier carpeta, solo escribe: jaki buscar revshell
+Ejemplo: Ahora, desde cualquier carpeta, solo escribe: jaki buscar, listar, agregar <comando> :) 
+Viva el open Source, puedes agregar tus propios comandos o exploits para que cuando lo necesites solo ejecutes jaki buscar exploits  
