@@ -1,3 +1,6 @@
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)
+
 # 🚀 JakiSnippets
 
 > **Tu arsenal de comandos instantáneo en la terminal.**
@@ -28,10 +31,11 @@ Creado por **Jaki** para la comunidad. 🛡️
 Para instalar JakiSnippets en todo tu sistema Linux/Kali, solo ejecuta:
 
 ```bash
-git clone [https://github.com/TU_USUARIO/JakiSnippets.git](https://github.com/TU_USUARIO/JakiSnippets.git)
+git clone https://github.com/JakiNet/JakiSnippets.git
 cd JakiSnippets
 chmod +x install.sh
 ./install.sh
 
 ---
-Ejemplo: Ahora, desde cualquier carpeta, solo escribe: jaki buscar revshell
+Ejemplo: Ahora, desde cualquier carpeta, solo escribe: jaki buscar, listar, agregar <comando> :) 
+Viva el open Source, puedes agregar tus propios comandos o exploits para que cuando lo necesites solo ejecutes jaki buscar exploits  
