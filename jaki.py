@@ -3,6 +3,8 @@ import json
 import sys
 import os
 
+VERSION_ACTUAL = "2.0"
+
 # Intentar importar pyperclip para copiar al portapapeles
 try:
     import pyperclip
@@ -123,55 +125,59 @@ def agregar_snippet(data):
     except Exception as e:
         print(f"{Colores.RED}❌ Error al guardar: {e}{Colores.ENDC}")
 
+import urllib.request # Asegúrate de tener este import arriba
+
 def actualizar():
-    """Descarga la última versión desde GitHub y reinstala la herramienta."""
-    print(f"{Colores.BLUE}[*] Iniciando actualización desde GitHub...{Colores.ENDC}")
+    """Comprueba la versión y actualiza si es necesario."""
+    url_version_raw = "https://raw.githubusercontent.com/JakiNet/JakiSnippets/main/jaki.py"
     
+    print(f"{Colores.BLUE}[*] Comprobando actualizaciones...{Colores.ENDC}")
+    
+    try:
+        # Intentamos leer la versión del repo remoto sin descargar todo
+        with urllib.request.urlopen(url_version_raw) as response:
+            contenido = response.read().decode('utf-8')
+            # Buscamos la línea VERSION_ACTUAL = "X.X" en el texto
+            import re
+            match = re.search(r'VERSION_ACTUAL\s*=\s*["\']([^"\']+)["\']', contenido)
+            
+            if match:
+                version_remota = match.group(1)
+                if version_remota == VERSION_ACTUAL:
+                    print(f"{Colores.GREEN}✅ Ya tienes la última versión (v{VERSION_ACTUAL}).{Colores.ENDC}")
+                    return
+                else:
+                    print(f"{Colores.YELLOW}[!] Nueva versión detectada: v{version_remota} (Tienes la v{VERSION_ACTUAL}){Colores.ENDC}")
+            
+    except Exception:
+        # Si falla la comprobación (ej. sin internet), continuamos con la actualización por si acaso
+        print(f"{Colores.YELLOW}[!] No se pudo verificar la versión, procediendo con la descarga...{Colores.ENDC}")
+
+    # --- A partir de aquí sigue tu lógica de clonación y ejecución de install.sh ---
     if os.geteuid() != 0:
-        print(f"{Colores.RED}[!] Error: Debes ejecutar 'sudo jaki update' para actualizar.{Colores.ENDC}")
+        print(f"{Colores.RED}[!] Error: Debes ejecutar 'sudo jaki update' para instalar los cambios.{Colores.ENDC}")
         return
 
     repo_url = "https://github.com/JakiNet/JakiSnippets.git"
     temp_dir = "/tmp/jaki_update_dir"
 
     try:
-        # 1. Limpieza previa
         os.system(f"rm -rf {temp_dir}")
-        
-        # 2. Clonación
-        print(f"{Colores.YELLOW}[*] Clonando repositorio...{Colores.ENDC}")
+        print(f"{Colores.YELLOW}[*] Descargando actualización...{Colores.ENDC}")
         result = os.system(f"git clone --depth 1 {repo_url} {temp_dir} > /dev/null 2>&1")
         
-        if result != 0:
-            print(f"{Colores.RED}[!] Error al clonar. Asegúrate de tener 'git' instalado.{Colores.ENDC}")
-            return
-
-        # 3. Instalación
-        if os.path.exists(temp_dir):
+        if result == 0 and os.path.exists(temp_dir):
             os.chdir(temp_dir)
-            
-            # Buscamos el instalador ignorando mayúsculas/minúsculas
             archivos = os.listdir('.')
             instalador = next((f for f in archivos if f.lower() == "install.sh"), None)
             
             if instalador:
-                print(f"{Colores.YELLOW}[*] Ejecutando {instalador}...{Colores.ENDC}")
                 os.system(f"chmod +x {instalador}")
-                # Ejecutamos el script de instalación
                 if os.system(f"bash {instalador}") == 0:
-                    print(f"\n{Colores.GREEN}✅ ¡JakiSnippets actualizado correctamente!{Colores.ENDC}")
-                else:
-                    print(f"{Colores.RED}[!] El script de instalación falló.{Colores.ENDC}")
+                    print(f"\n{Colores.GREEN}✅ ¡JakiSnippets actualizado a la v{version_remota}!{Colores.ENDC}")
             else:
-                print(f"{Colores.RED}[!] Error: No se encontró 'install.sh' en el repo.{Colores.ENDC}")
-                print(f"{Colores.BLUE}[i] Archivos vistos: {archivos}{Colores.ENDC}")
-        else:
-            print(f"{Colores.RED}[!] Fallo crítico: No se pudo acceder al directorio temporal.{Colores.ENDC}")
-
-    except Exception as e:
-        print(f"{Colores.RED}[!] Error inesperado: {e}{Colores.ENDC}")
+                print(f"{Colores.RED}[!] Error: No se encontró el instalador.{Colores.ENDC}")
     finally:
-        # Siempre regresamos a raíz antes de borrar para evitar errores de "Directorio en uso"
         os.chdir("/")
         os.system(f"rm -rf {temp_dir}")
 
