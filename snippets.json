@@ -28,6 +28,32 @@
     {"titulo": "Hydra: Fuerza bruta RDP", "cmd": "hydra -L users.txt -P passwords.txt rdp://OBJETIVO"},
     {"titulo": "Wfuzz: Fuzzing de subdominios", "cmd": "wfuzz -c -f subdomains.txt -u \"http://OBJETIVO\" -H \"Host: FUZZ.OBJETIVO\" --hl 20"}
   ],
+  "cripto_decodificacion": [
+    {
+      "titulo": "Decodificar Base64",
+      "cmd": "echo \"DATA\" | base64 -d"
+    },
+    {
+      "titulo": "Codificar en Base64",
+      "cmd": "echo -n \"TEXTO\" | base64"
+    },
+    {
+      "titulo": "Identificar tipo de Hash (hashid)",
+      "cmd": "hashid \"HASH\""
+    },
+    {
+      "titulo": "Crackear MD5 con Hashcat",
+      "cmd": "hashcat -m 0 hash.txt /usr/share/wordlists/rockyou.txt"
+    },
+    {
+      "titulo": "Crackear MD5 con John the Ripper",
+      "cmd": "john --format=Raw-MD5 hash.txt --wordlist=/usr/share/wordlists/rockyou.txt"
+    },
+    {
+      "titulo": "Decodificar URL (URL Decode)",
+      "cmd": "python3 -c \"import sys, urllib.parse; print(urllib.parse.unquote(sys.stdin.read()))\""
+    }
+  ],
   "windows_ad": [
     {"titulo": "Evil-WinRM: Conexión básica", "cmd": "evil-winrm -i IP -u usuario -p password"},
     {"titulo": "Impacket: GetADUsers", "cmd": "impacket-GetADUsers -all -dc-ip IP DOMINIO/usuario"},
