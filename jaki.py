@@ -132,42 +132,50 @@ def actualizar():
         return
 
     repo_url = "https://github.com/JakiNet/JakiSnippets.git"
-    temp_dir = "/tmp/jaki_update"
+    temp_dir = "/tmp/jaki_update_dir" # Cambiamos el nombre para evitar conflictos
 
     try:
-        # 1. Limpieza y Clonación
+        # 1. Limpieza total antes de empezar
         os.system(f"rm -rf {temp_dir}")
-        print(f"{Colores.YELLOW}[*] Clonando última versión...{Colores.ENDC}")
         
-        # Clonamos el repositorio
-        resultado_clone = os.system(f"git clone --depth 1 {repo_url} {temp_dir} > /dev/null 2>&1")
+        # 2. Clonación con verificación de error
+        print(f"{Colores.YELLOW}[*] Clonando repositorio...{Colores.ENDC}")
+        result = os.system(f"git clone --depth 1 {repo_url} {temp_dir}")
         
-        if resultado_clone != 0:
-            print(f"{Colores.RED}[!] Error: No se pudo clonar el repo. Verifica que 'git' esté instalado.{Colores.ENDC}")
+        if result != 0:
+            print(f"{Colores.RED}[!] Error al clonar. ¿Tienes instalado git?{Colores.ENDC}")
             return
 
+        # 3. Entrar al directorio
         if os.path.exists(temp_dir):
             os.chdir(temp_dir)
             
-            # 2. Búsqueda inteligente del instalador (ignora mayúsculas/minúsculas)
-            archivos = os.listdir('.')
-            # Buscamos cualquier archivo que se llame install.sh sin importar el Case
-            instalador = next((f for f in archivos if f.lower() == "install.sh"), None)
+            # DIAGNÓSTICO: Ver qué hay realmente en la carpeta
+            archivos_reales = os.listdir('.')
+            print(f"{Colores.BLUE}[i] Archivos descargados: {archivos_reales}{Colores.ENDC}")
+
+            # Buscamos el instalador (sea como sea que se llame)
+            instalador = None
+            for f in archivos_reales:
+                if f.lower() == "install.sh":
+                    instalador = f
+                    break
             
             if instalador:
                 print(f"{Colores.YELLOW}[*] Ejecutando {instalador}...{Colores.ENDC}")
-                # Damos permisos y ejecutamos
                 os.system(f"chmod +x {instalador}")
                 os.system(f"bash {instalador}")
-                print(f"\n{Colores.GREEN}✅ ¡JakiSnippets actualizado con éxito!{Colores.ENDC}")
+                print(f"\n{Colores.GREEN}✅ ¡JakiSnippets actualizado!{Colores.ENDC}")
             else:
-                print(f"{Colores.RED}[!] Error: No se encontró 'Install.sh' en el repo.{Colores.ENDC}")
-                print(f"{Colores.YELLOW}Archivos encontrados: {archivos}{Colores.ENDC}")
-        
+                print(f"{Colores.RED}[!] Error: 'install.sh' no aparece en la lista anterior.{Colores.ENDC}")
+        else:
+            print(f"{Colores.RED}[!] El directorio temporal no se creó.{Colores.ENDC}")
+
     except Exception as e:
-        print(f"{Colores.RED}[!] Error crítico: {e}{Colores.ENDC}")
+        print(f"{Colores.RED}[!] Error inesperado: {e}{Colores.ENDC}")
     finally:
-        # 3. Limpieza final
+        # Volver a la carpeta original antes de borrar la temporal
+        os.chdir("/") 
         os.system(f"rm -rf {temp_dir}")
 
 def main():
