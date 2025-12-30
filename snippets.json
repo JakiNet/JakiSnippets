@@ -153,5 +153,46 @@
       "titulo": "Ver historial de comandos",
       "cmd": "history"
     }
+  ],
+{
+  "actualizacion": [
+    {
+      "titulo": "Actualizar Debian / Ubuntu / Kali",
+      "cmd": "sudo apt update && sudo apt upgrade -y"
+    },
+    {
+      "titulo": "Limpiar paquetes innecesarios (Apt)",
+      "cmd": "sudo apt autoremove && sudo apt autoclean"
+    },
+    {
+      "titulo": "Actualizar Fedora (DNF)",
+      "cmd": "sudo dnf upgrade --refresh"
+    },
+    {
+      "titulo": "Actualizar Arch Linux (Pacman)",
+      "cmd": "sudo pacman -Syu"
+    },
+    {
+      "titulo": "Actualizar CentOS / RHEL (Yum)",
+      "cmd": "sudo yum update -y"
+    },
+    {
+      "titulo": "Actualizar todos los paquetes de Python (Pip)",
+      "cmd": "pip list --outdated --format=freeze | grep -v '^-e' | cut -d = -f 1 | xargs -n1 pip install -U"
+    },
+    {
+      "titulo": "Actualizar Firmware del Sistema (fwupdmgr)",
+      "cmd": "fwupdmgr get-updates && fwupdmgr update"
+    },
+    {
+      "titulo": "Actualizar Flatpaks",
+      "cmd": "flatpak update -y"
+    },
+    {
+      "titulo": "Actualizar Repositorio Git actual",
+      "cmd": "git pull origin $(git rev-parse --abbrev-ref HEAD)"
+    }
   ]
+}
+
 }
