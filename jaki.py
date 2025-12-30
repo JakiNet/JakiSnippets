@@ -150,6 +150,18 @@ def actualizar():
         if os.path.exists(temp_dir):
             os.chdir(temp_dir)
             
+            # Esto busca cualquier archivo que se llame install.sh ignorando mayúsculas
+            archivos = os.listdir('.')
+            instalador = next((f for f in archivos if f.lower() == "install.sh"), None)
+            
+            if instalador:
+                print(f"{Colores.YELLOW}[*] Ejecutando {instalador}...{Colores.ENDC}")
+                os.system(f"chmod +x {instalador}")
+                os.system(f"bash {instalador}")
+                print(f"\n{Colores.GREEN}✅ ¡JakiSnippets actualizado con éxito!{Colores.ENDC}")
+            else:
+                print(f"{Colores.RED}[!] Error: No se encontró 'install.sh' en el repo.{Colores.ENDC}")
+            
             # DIAGNÓSTICO: Ver qué hay realmente en la carpeta
             archivos_reales = os.listdir('.')
             print(f"{Colores.BLUE}[i] Archivos descargados: {archivos_reales}{Colores.ENDC}")
