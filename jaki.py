@@ -124,43 +124,38 @@ def agregar_snippet(data):
         print(f"{Colores.RED}❌ Error al guardar: {e}{Colores.ENDC}")
 
 def actualizar():
-    """Descarga la última versión desde GitHub y reinstala la herramienta."""
-    print(f"{Colores.BLUE}[*] Iniciando actualización desde GitHub...{Colores.ENDC}")
+    """Descarga la última versión del script y se reinstala a sí mismo."""
+    print(f"{Colores.BLUE}[*] Iniciando actualización automática...{Colores.ENDC}")
     
     if os.geteuid() != 0:
-        print(f"{Colores.RED}[!] Error: Debes ejecutar 'sudo jaki update' para actualizar.{Colores.ENDC}")
+        print(f"{Colores.RED}[!] Error: Debes ejecutar 'sudo jaki update' para actualizar el sistema.{Colores.ENDC}")
         return
 
-    repo_url = "https://github.com/JakiNet/JakiSnippets.git"
-    temp_dir = "/tmp/jaki_update"
+    # URL directa al archivo en bruto (raw) de GitHub
+    url_raw = "https://raw.githubusercontent.com/JakiNet/JakiSnippets/main/jaki.py"
+    target_path = "/usr/local/bin/jaki"
 
     try:
-        os.system(f"rm -rf {temp_dir}")
-        print(f"{Colores.YELLOW}[*] Clonando última versión...{Colores.ENDC}")
-        # Clonamos el repositorio
-        os.system(f"git clone --depth 1 {repo_url} {temp_dir} > /dev/null 2>&1")
+        import urllib.request
         
-        if os.path.exists(temp_dir):
-            os.chdir(temp_dir)
-            
-            # Buscamos el instalador sin importar mayúsculas/minúsculas
-            archivos = os.listdir('.')
-            instalador = next((f for f in archivos if f.lower() == "install.sh"), None)
-            
-            if instalador:
-                print(f"{Colores.YELLOW}[*] Ejecutando {instalador}...{Colores.ENDC}")
-                os.system(f"chmod +x {instalador}") # Aseguramos permisos
-                os.system(f"bash {instalador}")
-                print(f"\n{Colores.GREEN}✅ ¡JakiSnippets actualizado con éxito!{Colores.ENDC}")
-            else:
-                # Si no hay install.sh, quizás solo necesites copiar el script a /usr/local/bin
-                print(f"{Colores.RED}[!] Error: No se encontró 'install.sh' o 'Install.sh'.{Colores.ENDC}")
-                print(f"{Colores.YELLOW}[*] Sugerencia: Revisa el nombre del archivo en el repositorio.{Colores.ENDC}")
+        print(f"{Colores.YELLOW}[*] Descargando última versión desde GitHub...{Colores.ENDC}")
         
+        # Descargamos el contenido del nuevo script
+        with urllib.request.urlopen(url_raw) as response:
+            nuevo_codigo = response.read()
+
+        # Escribimos el nuevo contenido en la ruta del binario
+        with open(target_path, 'wb') as f:
+            f.write(nuevo_codigo)
+        
+        # Aseguramos que sea ejecutable
+        os.chmod(target_path, 0o755)
+        
+        print(f"\n{Colores.GREEN}✅ ¡JakiSnippets actualizado con éxito en {target_path}!{Colores.ENDC}")
+        print(f"{Colores.BLUE}[i] Ya puedes usar la nueva versión inmediatamente.{Colores.ENDC}")
+
     except Exception as e:
-        print(f"{Colores.RED}[!] Error: {e}{Colores.ENDC}")
-    finally:
-        os.system(f"rm -rf {temp_dir}")
+        print(f"{Colores.RED}[!] Error durante la actualización: {e}{Colores.ENDC}")
 
 def main():
     print_banner()
