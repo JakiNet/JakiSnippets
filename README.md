@@ -35,7 +35,8 @@ git clone https://github.com/JakiNet/JakiSnippets.git
 cd JakiSnippets
 chmod +x install.sh
 ./install.sh
-
+```
 ---
-Ejemplo: Ahora, desde cualquier carpeta, solo escribe: jaki buscar, listar, agregar <comando> :) 
-Viva el open Source, puedes agregar tus propios comandos o exploits para que cuando lo necesites solo ejecutes jaki buscar exploits  
+Ahora, desde cualquier parte de tu terminal puedes escribir: jaki buscar, listar, agregar <comando>, jaki update... :) 
+Open Source: Puedes agregar tus propios comandos.
+Proyecto en constante actualizacion se recomienda hacer sudo jaki update para obtener la actualizacion mas reciente de la herramienta.
