@@ -22,15 +22,22 @@ USER_CONFIG = os.path.expanduser("~/.jaki_snippets.json")
 SYSTEM_CONFIG = "/opt/jakisnippets/snippets.json"
 
 def get_data_path():
-    # NUEVA LÍNEA: Si hay un snippets.json aquí mismo, úsalo (Ideal para Git)
-    if os.path.exists("snippets.json"):
-        return os.path.abspath("snippets.json")
+    # 1. RUTA DEL SISTEMA (Donde 'update' guarda los cambios)
+    SYSTEM_PATH = "/opt/jakisnippets/snippets.json"
     
-    if os.path.exists(USER_CONFIG):
-        return USER_CONFIG
-    if os.path.exists(SYSTEM_CONFIG):
-        return SYSTEM_CONFIG
-    return USER_CONFIG
+    # 2. RUTA LOCAL (Donde el usuario agrega sus cosas)
+    USER_PATH = os.path.expanduser("~/.jaki_snippets.json")
+
+    # PRIORIDAD 1: Si estamos en la carpeta del repo (Desarrollo)
+    if os.path.exists(".git") and os.path.exists("snippets.json"):
+        return os.path.abspath("snippets.json")
+
+    # PRIORIDAD 2: El archivo del SISTEMA (El que acabas de actualizar)
+    if os.path.exists(SYSTEM_PATH):
+        return SYSTEM_PATH
+
+    # PRIORIDAD 3: El archivo del USUARIO
+    return USER_PATH
 
 def print_banner():
     print(f"""{Colores.BLUE}{Colores.BOLD}
@@ -166,15 +173,18 @@ def actualizar():
         print(f"{Colores.YELLOW}[*] Descargando actualización...{Colores.ENDC}")
         result = os.system(f"git clone --depth 1 {repo_url} {temp_dir} > /dev/null 2>&1")
         
-        if result == 0 and os.path.exists(temp_dir):
+            if result == 0 and os.path.exists(temp_dir):
             os.chdir(temp_dir)
             archivos = os.listdir('.')
             instalador = next((f for f in archivos if f.lower() == "install.sh"), None)
             
             if instalador:
                 os.system(f"chmod +x {instalador}")
-                if os.system(f"bash {instalador}") == 0:
-                    print(f"\n{Colores.GREEN}✅ ¡JakiSnippets actualizado a la v{version_remota}!{Colores.ENDC}")
+                if os.system(f"sudo bash {instalador}") == 0: # Añadido sudo por si acaso
+                    # Usamos una versión genérica si version_remota no existe
+                    v = version_remota if 'version_remota' in locals() else "nueva"
+                    print(f"\n{Colores.GREEN}✅ ¡JakiSnippets actualizado a la v{v}!{Colores.ENDC}")
+
             else:
                 print(f"{Colores.RED}[!] Error: No se encontró el instalador.{Colores.ENDC}")
     finally:
