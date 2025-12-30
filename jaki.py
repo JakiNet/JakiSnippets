@@ -3,7 +3,7 @@ import json
 import sys
 import os
 
-VERSION_ACTUAL = "1.2"
+VERSION_ACTUAL = "1.3"
 
 # Intentar importar pyperclip para copiar al portapapeles
 try:
