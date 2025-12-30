@@ -143,13 +143,19 @@ def actualizar():
         if os.path.exists(temp_dir):
             os.chdir(temp_dir)
             
-            # Cambiamos a 'install.sh' en minúsculas
-            if os.path.exists("install.sh"):
-                print(f"{Colores.YELLOW}[*] Ejecutando instalador...{Colores.ENDC}")
-                os.system("bash install.sh")
+            # Buscamos el instalador sin importar mayúsculas/minúsculas
+            archivos = os.listdir('.')
+            instalador = next((f for f in archivos if f.lower() == "install.sh"), None)
+            
+            if instalador:
+                print(f"{Colores.YELLOW}[*] Ejecutando {instalador}...{Colores.ENDC}")
+                os.system(f"chmod +x {instalador}") # Aseguramos permisos
+                os.system(f"bash {instalador}")
                 print(f"\n{Colores.GREEN}✅ ¡JakiSnippets actualizado con éxito!{Colores.ENDC}")
             else:
-                print(f"{Colores.RED}[!] Error: No se encontró 'install.sh' en el repo.{Colores.ENDC}")
+                # Si no hay install.sh, quizás solo necesites copiar el script a /usr/local/bin
+                print(f"{Colores.RED}[!] Error: No se encontró 'install.sh' o 'Install.sh'.{Colores.ENDC}")
+                print(f"{Colores.YELLOW}[*] Sugerencia: Revisa el nombre del archivo en el repositorio.{Colores.ENDC}")
         
     except Exception as e:
         print(f"{Colores.RED}[!] Error: {e}{Colores.ENDC}")
