@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-import json, sys, os
+import json
+import sys
+import os
 
 # Intentar importar pyperclip para copiar al portapapeles
 try:
@@ -11,27 +13,44 @@ except ImportError:
 class Colores:
     HEADER, BLUE, GREEN, YELLOW, RED, ENDC, BOLD = '\033[95m', '\033[94m', '\033[92m', '\033[93m', '\033[91m', '\033[0m', '\033[1m'
 
+# --- CONFIGURACIÓN DE RUTAS ---
+# Prioridad 1: Archivo en el HOME del usuario (Para que siempre pueda escribir)
+USER_CONFIG = os.path.expanduser("~/.jaki_snippets.json")
+# Prioridad 2: Archivo en la carpeta de instalación (Solo lectura si es /opt/)
+SYSTEM_CONFIG = "/opt/jakisnippets/snippets.json"
+
+def get_data_path():
+    # NUEVA LÍNEA: Si hay un snippets.json aquí mismo, úsalo (Ideal para Git)
+    if os.path.exists("snippets.json"):
+        return os.path.abspath("snippets.json")
+    
+    if os.path.exists(USER_CONFIG):
+        return USER_CONFIG
+    if os.path.exists(SYSTEM_CONFIG):
+        return SYSTEM_CONFIG
+    return USER_CONFIG
+
 def print_banner():
     print(f"""{Colores.BLUE}{Colores.BOLD}
       ██╗ █████╗ ██╗  ██╗██╗███████╗███╗   ██╗██╗██████╗ ██████╗ ███████╗████████╗███████╗
       ██║██╔══██╗██║ ██╔╝██║██╔════╝████╗  ██║██║██╔══██╗██╔══██╗██╔════╝╚══██╔══╝██╔════╝
-      ██║███████║█████╔╝ ██║███████╗██╔██╗ ██║██║██████╔╝██████╔╝█████╗     ██║   ███████╗
- ██   ██║██╔══██║██╔═██╗ ██║╚════██║██║╚██╗██║██║██╔═══╝ ██╔═══╝ ██╔══╝     ██║   ╚════██║
- ╚█████╔╝██║  ██║██║  ██╗██║███████║██║ ╚████║██║██║     ██║     ███████╗    ██║   ███████║
-  ╚════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚══════╝╚═╝  ╚═══╝╚═╝╚═╝     ╚═╝     ╚══════╝    ╚═╝   ╚══════╝
+      ██║███████║█████╔╝ ██║███████╗██╔██╗ ██║██║██████╔╝██████╔╝█████╗      ██║   ███████║
+ ██   ██║██╔══██║██╔═██╗ ██║╚════██║██║╚██╗██║██║██╔═══╝ ██╔═══╝ ██╔══╝      ██║   ╚════██║
+ ╚█████╔╝██║  ██║██║  ██╗██║███████║██║ ╚████║██║██║      ██║      ███████╗    ██║   ███████║
+  ╚════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚══════╝╚═╝  ╚═══╝╚═╝╚═╝      ╚═╝      ╚══════╝    ╚═╝   ╚══════╝
     {Colores.ENDC}""")
 
 def load_data():
-    path = "/opt/jakisnippets/snippets.json"
+    path = get_data_path()
     if not os.path.exists(path):
-        path = os.path.join(os.path.dirname(__file__), 'snippets.json')
+        return {} # Retorna base de datos vacía si no hay archivo
     
     try:
         with open(path, 'r', encoding='utf-8') as f: 
             return json.load(f)
     except Exception as e:
         print(f"{Colores.RED}[!] Error cargando base de datos: {e}{Colores.ENDC}")
-        sys.exit(1)
+        return {}
 
 def buscar(data, query):
     resultados = []
@@ -54,7 +73,6 @@ def buscar(data, query):
         print(f"{Colores.RED}❌ No se encontró nada que coincida con '{query}'.{Colores.ENDC}")
         return
 
-    # Mostrar resultados numerados
     for idx, r in enumerate(resultados):
         print(f"{Colores.GREEN}[{idx}]{Colores.ENDC} {Colores.BLUE}[{r['cat']}]{Colores.ENDC} {Colores.BOLD}{r['titulo']}{Colores.ENDC}")
         print(f"    {Colores.YELLOW}{r['cmd']}{Colores.ENDC}")
@@ -73,26 +91,37 @@ def buscar(data, query):
         print("\nSaliendo...")
 
 def listar_categorias(data):
+    if not data:
+        print(f"{Colores.YELLOW}La base de datos está vacía.{Colores.ENDC}")
+        return
     print(f"{Colores.HEADER}Categorías Disponibles:{Colores.ENDC}")
     print(" | ".join(data.keys()))
 
 def agregar_snippet(data):
     print(f"\n{Colores.BLUE}--- Añadir Nuevo Comando ---{Colores.ENDC}")
     listar_categorias(data)
-    cat = input("\n[?] Categoría: ").lower()
-    tit = input("[?] Título: ")
-    cmd = input("[?] Comando: ")
     
+    cat = input("\n[?] Categoría: ").strip().lower()
+    tit = input("[?] Título: ").strip()
+    cmd = input("[?] Comando: ").strip()
+    
+    if not cat or not tit or not cmd:
+        print(f"{Colores.RED}❌ Error: Todos los campos son obligatorios.{Colores.ENDC}")
+        return
+
     if cat not in data: data[cat] = []
     data[cat].append({"titulo": tit, "cmd": cmd})
 
-    path = "/opt/jakisnippets/snippets.json"
-    if not os.access(os.path.dirname(path), os.W_OK):
-        path = os.path.join(os.path.dirname(__file__), 'snippets.json')
-
-    with open(path, 'w', encoding='utf-8') as f:
-        json.dump(data, f, indent=2)
-    print(f"{Colores.GREEN}✅ Guardado.{Colores.ENDC}")
+    # Decidir dónde guardar: Si no tenemos permiso en /opt, guardamos en el HOME
+    save_path = USER_CONFIG
+    
+    # Intentar guardar
+    try:
+        with open(save_path, 'w', encoding='utf-8') as f:
+            json.dump(data, f, indent=2)
+        print(f"{Colores.GREEN}✅ Guardado correctamente en: {save_path}{Colores.ENDC}")
+    except Exception as e:
+        print(f"{Colores.RED}❌ Error al guardar: {e}{Colores.ENDC}")
 
 def main():
     print_banner()
@@ -100,15 +129,14 @@ def main():
     
     if len(sys.argv) < 2:
         print(f"{Colores.YELLOW}Modo de uso:{Colores.ENDC}")
-        print("  jaki <termino>         -> Buscar rápido (ej: jaki sqli)")
-        print("  jaki buscar <termino>  -> Búsqueda explícita")
-        print("  jaki listar            -> Ver categorías")
-        print("  jaki agregar           -> Añadir comando")
+        print("  jaki <termino>        -> Buscar rápido")
+        print("  jaki buscar <termino> -> Búsqueda explícita")
+        print("  jaki listar           -> Ver categorías")
+        print("  jaki agregar          -> Añadir comando")
         return
 
     acc = sys.argv[1].lower()
 
-    # Lógica de excepciones y comandos
     if acc == "listar":
         listar_categorias(data)
     elif acc == "agregar":
@@ -119,7 +147,6 @@ def main():
         else:
             print(f"{Colores.RED}[!] Indica qué buscar después de 'buscar'.{Colores.ENDC}")
     else:
-        # EXCEPCIÓN: Si el usuario escribe 'jaki algo', se busca 'algo' directamente
         buscar(data, acc)
 
 if __name__ == "__main__":

