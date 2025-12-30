@@ -72,7 +72,7 @@
     {"titulo": "GTFOBins (Linux Escala)", "cmd": "https://gtfobins.github.io/"},
     {"titulo": "LOLBAS (Windows Escala)", "cmd": "https://lolbas-project.github.io/"}
   ],
-"git": [
+  "git": [
     {
       "titulo": "Configurar usuario y correo",
       "cmd": "git config --global user.name \"Tu Nombre\" && git config --global user.email \"tu@email.com\""
@@ -154,7 +154,6 @@
       "cmd": "history"
     }
   ],
-{
   "actualizacion": [
     {
       "titulo": "Actualizar Debian / Ubuntu / Kali",
@@ -195,4 +194,3 @@
   ]
 }
 
-}
