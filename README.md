@@ -2,6 +2,10 @@
 
 > **Tu arsenal de comandos instantáneo en la terminal.**
 
+<p align="center">
+  <img src="terminal.png" alt="JakiSnippets en acción" width="800">
+</p>
+
 **JakiSnippets** es una herramienta CLI (Command Line Interface) diseñada para hackers, pentesters y estudiantes de ciberseguridad que están cansados de buscar los mismos comandos una y otra vez.
 
 Olvídate de tener 50 pestañas del navegador abiertas o archivos de texto desordenados. JakiSnippets te da el "one-liner" exacto que necesitas en un segundo, directamente en tu terminal, listo para copiar y pegar.
